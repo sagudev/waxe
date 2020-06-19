@@ -1,0 +1,27 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "build",
+        "command": "./mach",
+        "args": [
+          "build"
+        ],
+        "options": {
+          "cwd": "${workspaceRoot}"
+        },
+        "problemMatcher": ["$rustc"]
+      },
+      {
+        "label": "fmt",
+        "command": "./mach",
+        "args": [
+          "fmt"
+        ],
+        "options": {
+          "cwd": "${workspaceRoot}"
+        },
+        "problemMatcher": []
+      }
+    ]
+  }

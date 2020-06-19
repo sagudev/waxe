@@ -1,0 +1,72 @@
+#!/bin/bash
+# TODO: mach as rust reading mach.json with env and commands.
+# conf to be like github actions
+export CC=clang
+export CXX=clang++
+export SHELL=/bin/bash
+case $1 in
+    bootstrap)
+        sudo apt update
+        wget -q https://hg.mozilla.org/mozilla-central/raw-file/default/python/mozboot/bin/bootstrap.py -O /tmp/bootstrap.py
+        python /tmp/bootstrap.py --application-choice=browser --no-interactive || exit 0
+    ;;
+    bootstrap-dev)
+        cargo install cargo-expand
+    ;;
+    run)
+        target/debug/$(basename "$PWD") "${@:2}"
+    ;;
+    build)
+        cargo build "${@:2}"
+    ;;
+    rele*)
+        cargo build --release "${@:2}"
+    ;;
+    crun)
+        cargo run "${@:2}"
+    ;;
+    clo*) #clober
+        cargo clean "${@:2}"
+    ;;
+    clean)
+        cargo clean "${@:2}"
+    ;;
+    fmt)
+        cargo fmt "${@:2}"
+    ;;
+    test)
+        cargo "test" --all "${@:2}"
+    ;;
+    doc)
+        case "$2" in
+            open)
+                cargo doc --open "${@:3}"
+            ;;
+            *)
+                cargo doc "${@:2}"
+            ;;
+        esac
+    ;;
+    macro)
+        cargo expand
+    ;;
+    code)
+        code .
+    ;;
+    help)
+        echo "Mini mach v0.0.5"
+        echo "Mozilla's mach clone"
+        echo "bootstrap     install deps"
+        echo "clean/clober  cargo clean"
+        echo "build         cargo build"
+        echo "run           cargo run without build"
+        echo "help          this"
+        echo "code          open in vscode"
+        echo "doc (open)    cargo doc --open"
+        echo "crun          cargo run"
+        echo "test          cargo test"
+    ;;
+    *)
+        echo "Command $1 unknown, try ./mach help."
+    ;;
+esac
