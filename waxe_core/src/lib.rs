@@ -1,4 +1,4 @@
-extern crate mozjs;
+mod sm;
 
 
 #[test]
