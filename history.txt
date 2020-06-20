@@ -1,0 +1,11 @@
+#V2
+a = 5
+version()
+g = version()
+5
+5+5
+5
+a = 5
+++a
+a
+version()

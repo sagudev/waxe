@@ -4,8 +4,6 @@ version = "0.1.0"
 authors = ["sagudev <samo.golez@outlook.com>"]
 edition = "2018"
 
-[lib]
-proc-macro = true
-
 [dependencies]
 mozjs =  {package = "mozjs", git = "https://github.com/servo/rust-mozjs", rev = "28248e1d6658e92dd5ecb0866e53a97f043b9b38", features = ["debugmozjs"]}
+libc = "0.2.71"
