@@ -162,22 +162,6 @@ impl SME {
             1,
             0,
         );
-        JS_DefineFunction(
-            cx,
-            global.into(),
-            b"input\0".as_ptr() as *const libc::c_char,
-            Some(input),
-            1,
-            0,
-        );
-        JS_DefineFunction(
-            cx,
-            global.into(),
-            b"exit\0".as_ptr() as *const _,
-            Some(exit),
-            1,
-            0,
-        );
         let function = JS_DefineFunction(
             cx,
             global.into(),
@@ -296,123 +280,6 @@ pub mod info {
     }
 }
 
-/// read function
-/// ```bash
-/// js> let a = read("history.txt")
-/// js> a
-///  <content of history.txt>
-/// ```
-/* unsafe extern "C" fn read(context: *mut JSContext, argc: u32, vp: *mut Value) -> bool {
-    let args = CallArgs::from_vp(vp, argc);
-    if args.argc_ != 1 {
-        mozjs::jsapi::JS_ReportErrorASCII(
-            context,
-            b"print() requires 1 argument\0".as_ptr() as *const libc::c_char,
-        );
-        return false;
-    }
-    let val = mozjs::rust::Handle::from_raw(args.get(0));
-    let s = mozjs::rust::ToString(context, val);
-    if s.is_null() {
-        JS_ReportErrorASCII(
-            context,
-            b"No file is given\0".as_ptr() as *const libc::c_char,
-        );
-        return false;
-    }
-    let mut filename = std::env::current_dir().unwrap();
-    rooted!(in(context) let path_root = s);
-    let path = JS_EncodeStringToUTF8(context, path_root.handle().into());
-    let path = CStr::from_ptr(path);
-    filename.push(str::from_utf8(path.to_bytes()).unwrap());
-    let mut file = match File::open(&filename) {
-        Ok(file) => file,
-        _ => {
-            JS_ReportErrorASCII(
-                context,
-                b"Can not open file\0".as_ptr() as *const libc::c_char,
-            );
-            return false;
-        }
-    };
-    let mut source = String::new();
-    if let Err(_) = file.read_to_string(&mut source) {
-        // TODO: report error
-        JS_ReportErrorASCII(
-            context,
-            b"Can not read file\0".as_ptr() as *const libc::c_char,
-        );
-        return false;
-    }
-    source.to_jsval(context, mozjs::rust::MutableHandle::from_raw(args.rval()));
-    true
-} */
-
-/// input function
-/// ```bash
-/// js> let a = input("enter: ")
-/// enter: samo
-/// js> a
-/// samo
-/// ```
-unsafe extern "C" fn input(context: *mut JSContext, argc: u32, vp: *mut Value) -> bool {
-    let args = CallArgs::from_vp(vp, argc);
-    let cx = context;
-    let val = mozjs::rust::Handle::from_raw(args.get(0));
-    let s = mozjs::rust::ToString(cx, val);
-    if s.is_null() {
-        JS_ReportErrorASCII(
-            context,
-            b"No input is here\0".as_ptr() as *const libc::c_char,
-        );
-        return false;
-    }
-    rooted!(in(cx) let message_root = s);
-    EncodeStringToUTF8(context, message_root.handle().into(), |message| {
-        let message = CStr::from_ptr(message);
-        let message = str::from_utf8(message.to_bytes()).unwrap();
-        print!("{}", message);
-    });
-    let mut s = String::new();
-    std::io::stdin().read_line(&mut s).unwrap();
-    let line = String::from(s.trim());
-    match line.trim().parse::<f64>() {
-        // is float
-        Ok(ok) => ok.to_jsval(cx, mozjs::rust::MutableHandle::from_raw(args.rval())),
-        _ => match line.trim().parse::<u64>() {
-            // is int
-            Ok(ok) => ok.to_jsval(cx, mozjs::rust::MutableHandle::from_raw(args.rval())),
-            _ => match line.trim().parse::<bool>() {
-                // is bool
-                Ok(ok) => ok.to_jsval(cx, mozjs::rust::MutableHandle::from_raw(args.rval())),
-                // else it is string
-                _ => line.to_jsval(cx, mozjs::rust::MutableHandle::from_raw(args.rval())),
-            },
-        },
-    }
-    true
-}
-
-/// exit function
-/// ```bash
-/// js> exit(0)
-/// ```
-unsafe extern "C" fn exit(context: *mut JSContext, argc: u32, vp: *mut Value) -> bool {
-    let args = CallArgs::from_vp(vp, argc);
-    let cx = context;
-    let val = mozjs::rust::Handle::from_raw(args.get(0));
-    let s: i32 = {
-        match mozjs::rust::ToInt32(cx, val) {
-            Ok(num) => num,
-            Err(_) => {
-                JS_ReportErrorASCII(context, b"No input here\0".as_ptr() as *const libc::c_char);
-                return false;
-            }
-        }
-    };
-    std::process::exit(s);
-}
-
 /// print function
 /// ```bash
 /// js> print('Test Iñtërnâtiônàlizætiøn ┬─┬ノ( º _ ºノ) '); print('hi')
@@ -424,37 +291,22 @@ unsafe extern "C" fn exit(context: *mut JSContext, argc: u32, vp: *mut Value) ->
 unsafe extern "C" fn print(context: *mut JSContext, argc: u32, vp: *mut Value) -> bool {
     let args = CallArgs::from_vp(vp, argc);
 
-    if args.argc_ != 1 && args.argc_ != 2 {
-        mozjs::jsapi::JS_ReportErrorASCII(
+    if args.argc_ != 1 {
+        JS_ReportErrorASCII(
             context,
-            b"print() requires 1 or 2 arguments\0".as_ptr() as *const libc::c_char,
+            b"puts() requires exactly 1 argument\0".as_ptr() as *const libc::c_char,
         );
         return false;
     }
 
     let arg = mozjs::rust::Handle::from_raw(args.get(0));
-    let arg1 = mozjs::rust::Handle::from_raw(args.get(1));
-    let ln = if fmt_js_value(context, arg1).is_empty() || args.argc_ != 2 {
-        true
-    } else {
-        mozjs::rust::ToBoolean(arg1)
-    };
     let js = mozjs::rust::ToString(context, arg);
     rooted!(in(context) let message_root = js);
-    if ln {
-        EncodeStringToUTF8(context, message_root.handle().into(), |message| {
-            let message = CStr::from_ptr(message);
-            let message = str::from_utf8(message.to_bytes()).unwrap();
-            println!("{}", message);
-        });
-    } else {
-        EncodeStringToUTF8(context, message_root.handle().into(), |message| {
-            let message = CStr::from_ptr(message);
-            let message = str::from_utf8(message.to_bytes()).unwrap();
-            print!("{}", message);
-        });
-    }
-
+    EncodeStringToUTF8(context, message_root.handle().into(), |message| {
+        let message = CStr::from_ptr(message);
+        let message = str::from_utf8(message.to_bytes()).unwrap();
+        println!("{}", message);
+    });
     args.rval().set(UndefinedValue());
     true
 }
