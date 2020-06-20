@@ -58,16 +58,10 @@ pub struct JSOptions {
 
 /// spider monkey engine data
 pub struct SME {
+    _ac: JSAutoRealm, // must be at start of sturct or error
     pub runtime: mozjs::rust::Runtime,
     _engine: JSEngine,
     pub global: *mut mozjs::jsapi::JSObject,
-    _ac: JSAutoRealm,
-}
-
-impl Drop for SME {
-    fn drop(&mut self) {
-        println!("SME Dropping!");
-    }
 }
 
 impl SME {
