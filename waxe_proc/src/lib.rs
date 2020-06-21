@@ -7,8 +7,8 @@ extern crate quote;
 use proc_macro::TokenStream;
 mod backend;
 use backend::get_namespace;
-use syn::{parse, parse_macro_input, AttributeArgs, NestedMeta};
 use syn::MetaNameValue;
+use syn::{parse, parse_macro_input, AttributeArgs, NestedMeta};
 
 #[proc_macro_attribute]
 pub fn jsfn(metadata: TokenStream, input: TokenStream) -> TokenStream {
