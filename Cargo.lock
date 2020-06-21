@@ -317,6 +317,9 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 [[package]]
 name = "roar"
 version = "0.1.0"
+dependencies = [
+ "waxe_proc 0.1.0",
+]
 
 [[package]]
 name = "rust-argon2"
@@ -369,6 +372,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 name = "shlex"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "syn"
+version = "1.0.32"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "proc-macro2 1.0.18 (registry+https://github.com/rust-lang/crates.io-index)",
+ "quote 1.0.7 (registry+https://github.com/rust-lang/crates.io-index)",
+ "unicode-xid 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
 
 [[package]]
 name = "unicode-segmentation"
@@ -424,6 +437,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 name = "waxe"
 version = "0.1.0"
 dependencies = [
+ "roar 0.1.0",
  "rustyline 6.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "waxe_core 0.1.0",
 ]
@@ -434,6 +448,17 @@ version = "0.1.0"
 dependencies = [
  "libc 0.2.71 (registry+https://github.com/rust-lang/crates.io-index)",
  "mozjs 0.13.0 (git+https://github.com/servo/rust-mozjs?rev=28248e1d6658e92dd5ecb0866e53a97f043b9b38)",
+]
+
+[[package]]
+name = "waxe_proc"
+version = "0.1.0"
+dependencies = [
+ "libc 0.2.71 (registry+https://github.com/rust-lang/crates.io-index)",
+ "mozjs 0.13.0 (git+https://github.com/servo/rust-mozjs?rev=28248e1d6658e92dd5ecb0866e53a97f043b9b38)",
+ "proc-macro2 1.0.18 (registry+https://github.com/rust-lang/crates.io-index)",
+ "quote 1.0.7 (registry+https://github.com/rust-lang/crates.io-index)",
+ "syn 1.0.32 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -518,6 +543,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum same-file 1.0.6 (registry+https://github.com/rust-lang/crates.io-index)" = "93fc1dc3aaa9bfed95e02e6eadabb4baf7e3078b0bd1b4d7b6b0b68378900502"
 "checksum scopeguard 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "d29ab0c6d3fc0ee92fe66e2d99f700eab17a8d57d1c1d3b748380fb20baa78cd"
 "checksum shlex 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "7fdf1b9db47230893d76faad238fd6097fd6d6a9245cd7a4d90dbd639536bbd2"
+"checksum syn 1.0.32 (registry+https://github.com/rust-lang/crates.io-index)" = "a994520748611c17d163e81b6c4a4b13d11b7f63884362ab2efac3aa9cf16d00"
 "checksum unicode-segmentation 1.6.0 (registry+https://github.com/rust-lang/crates.io-index)" = "e83e153d1053cbb5a118eeff7fd5be06ed99153f00dbcd8ae310c5fb2b22edc0"
 "checksum unicode-width 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)" = "caaa9d531767d1ff2150b9332433f32a24622147e5ebb1f26409d5da67afd479"
 "checksum unicode-xid 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "826e7639553986605ec5979c7dd957c7895e93eabed50ab2ffa7f6128a75097c"

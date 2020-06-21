@@ -294,7 +294,7 @@ unsafe extern "C" fn print(context: *mut JSContext, argc: u32, vp: *mut Value) -
     if args.argc_ != 1 {
         JS_ReportErrorASCII(
             context,
-            b"puts() requires exactly 1 argument\0".as_ptr() as *const libc::c_char,
+            b"print() requires exactly 1 argument\0".as_ptr() as *const libc::c_char,
         );
         return false;
     }

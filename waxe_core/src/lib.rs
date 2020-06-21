@@ -7,6 +7,7 @@ pub mod rtx;
 mod sm;
 /// Trio
 pub mod trio;
+/// proc
 
 #[test]
 fn it_works() {

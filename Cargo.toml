@@ -16,3 +16,4 @@ members = [
 [dependencies]
 rustyline = "6.2.0"
 waxe_core = {path = "waxe_core"}
+roar = {path = "roar"}

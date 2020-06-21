@@ -1,7 +1,12 @@
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
-    }
+extern crate waxe_proc;
+use waxe_proc::jsfn;
+
+#[jsfn(namespace = "test")]
+pub fn print(s: String) {
+    println!("rust said: {}", s)
+}
+
+#[jsfn]
+fn add(a: u32, b: u32) -> u32 {
+    a + b
 }
