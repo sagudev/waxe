@@ -12,8 +12,8 @@ use syn::{parse, parse_macro_input, AttributeArgs, NestedMeta};
 
 #[proc_macro_attribute]
 pub fn jsfn(metadata: TokenStream, input: TokenStream) -> TokenStream {
-    println!("attr: \"{}\"", input.to_string());
-    println!("item: \"{}\"", metadata.to_string());
+    //println!("attr: \"{}\"", input.to_string());
+    //println!("item: \"{}\"", metadata.to_string());
     let item: syn::Item = syn::parse(input).expect("failed to parse input");
     let attr: Vec<NestedMeta> = parse_macro_input!(metadata as AttributeArgs);
     /* if metadata.is_empty() { // normal function
@@ -26,7 +26,7 @@ pub fn jsfn(metadata: TokenStream, input: TokenStream) -> TokenStream {
             None => panic!("Wrong attribute in jsfn"),
         }
     }; */
-    for a in attr {
+    /* for a in attr {
         match a {
             NestedMeta::Meta(x) => match x {
                 syn::Meta::Path(_) => println!("1"),
@@ -35,7 +35,7 @@ pub fn jsfn(metadata: TokenStream, input: TokenStream) -> TokenStream {
             },
             NestedMeta::Lit(_) => println!("lit"),
         }
-    }
+    } */
     let output = quote! { #item };
     output.into()
 }

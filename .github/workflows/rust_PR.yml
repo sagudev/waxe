@@ -11,18 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Install latest stable Rust
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        profile: minimal
-        override: true
-        default: true
-        components: rustfmt, clippy
     - name: Prepare
       run: |
         sudo apt update
         sudo apt install gcc-7 ccache llvm autoconf2.13 automake clang python -y
+        rustup update
     - name: Cache cargo registry
       uses: actions/cache@v2
       with:
